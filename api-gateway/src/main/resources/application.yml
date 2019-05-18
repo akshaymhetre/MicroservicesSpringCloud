@@ -1,0 +1,50 @@
+server:
+  port: ${GATEWAY_PORT:8765}
+
+spring:
+  application:
+    name: gateway-server
+
+
+security.ignored: /**
+
+zuul:
+  routes:
+    functions:
+      path: /employee-create/**
+      sensitiveHeaders:
+      serviceId: employee-create
+
+# Increase the Hystrix timeout to 10s (globally)
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+        timeout:
+          enabled: false
+
+
+ribbon:
+  maxAutoRetries: 3
+  MaxAutoRetriesNextServer: 3
+  OkToRetryOnAllOperations: true
+  ReadTimeout: 50000
+  ConnectTimeout: 30000
+
+
+eureka:
+  client:
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone: http://${EUREKA_SERVER_HOST:localhost}:8761/eureka/
+
+
+#proxy:
+#  auth:
+#    routes:
+#      functions: oauth2
+#      workflow: oauth2
+#      identity: passthru
